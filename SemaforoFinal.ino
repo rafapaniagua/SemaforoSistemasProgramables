@@ -11,6 +11,8 @@
 //Declaracion de variables para control del tiempo en base al potenciometro
 int valorPot;
 int segundos;
+int tiempo;
+int minimo = 0;
 
 void setup() {
   //Declaracion de los leds y del buzzer como pines de salida
@@ -27,39 +29,38 @@ void setup() {
 }
 
 void loop() {
-  //Variable obtiene valor de acuerdo a la posicion del potenciometro
-  valorPot = analogRead(pot);
-  //Variable obtiene valor al multiplicar por 2 y dividir entre 100 el valor anterior
-  //Sera el valor para determinar el numero de segundos que durara el semaforo
-  segundos = (valorPot*2)/100;
-  Serial.print("Segundos en verde: ");
-  Serial.println(segundos);
-  //Se inicia el metodo que controla el verde del semaforo
+  //Se enciende fijamente el verde del semaforo y el rojo del peaton
+  digitalWrite(led_verde,HIGH);
+  digitalWrite(led_peat_rojo,HIGH);
+  //Se aumenta la variable del tiempo minimo para alcanzar los 10000 y haga efecto el boton
+  minimo += 10;
+  Serial.println(minimo);
+  //Si se presiona el boton despues del tiempo minimo entrara a la condicional
+  if((digitalRead(boton) == LOW) && (minimo > 10000)){
+    //El potenciometro controla el tiempo del verde del peaton
+    valorPot = analogRead(pot);
+    segundos = valorPot*20;
+    tiempo = segundos/1000;
+    Serial.println("Se presiono");
+    Serial.print("Esperará ");
+    Serial.print(tiempo);
+    Serial.println(" segundos");
+    //Se ejecuta el metodo de cambio de estados del semaforo
+    cambio();
+    //Se reinicia el contador del tiempo minimo para que haga efecto el boton
+    minimo = 0;
+  }
+}
+
+void cambio(){
+  //Metodo para hacer las transiciones entre los estados del semaforo
   verde();
-  //Se inicia el metodo que controla el amarillo del semaforo
   amarillo();
-  //Se inicia el metodo que controla el rojo del semaforo
   rojo();
 }
 
 void verde(){
-  //Se enciende fijamente el verde del semaforo y el rojo del peaton
-  digitalWrite(led_verde,HIGH);
-  digitalWrite(led_peat_rojo,HIGH);
-  //Se lleva a cabo un ciclo desde 0 hasta los x segundos obtenidos anteriormente
-  for(int x=0;x<segundos;x++){
-    //Esperamos un segundo
-    delay(1000);
-    //Comprobamos que no se haya pulsado el boton
-    if(digitalRead(boton) == LOW){
-      Serial.print("-----Se detuvo a los ");
-      Serial.print(x+1);
-      Serial.println(" segundos");
-      //Si el boton fue pulsado, se detiene el ciclo
-      x=segundos;
-    }
-  }
-  //Una vez detenido el ciclo parpadea 3 veces y se mantiene apagado
+  //Una vez presionado el boton parpadea 3 veces y se mantiene apagado
   digitalWrite(led_verde,LOW);
   delay(500);
   for(int x=0;x<3;x++){
@@ -81,14 +82,24 @@ void amarillo(){
 }
 
 void rojo(){
-  //Se enciende el rojo del semaforo, el verde del peaton y suena el buzzer, espera 4 segundos
+  //Se enciende el rojo del semaforo, el verde del peaton y suena el buzzer, espera el numero de segundos asignado por el potenciometro
   tone(buzzer,400);
   digitalWrite(led_rojo,HIGH);
   digitalWrite(led_peat_verde,HIGH);
-  delay(4000);
+  delay(segundos);
   //Se apaga el rojo del semaforo, el verde del peaton y el buzzer deja de sonar
   noTone(buzzer);
-  digitalWrite(led_rojo,LOW);
   digitalWrite(led_peat_verde,LOW);
-  delay(1000);
+  delay(500);
+  //Parpadea y suena 3 veces antes de volver a su estado original
+  for(int x=0;x<3;x++){
+    tone(buzzer,400);
+    digitalWrite(led_rojo,HIGH);
+    digitalWrite(led_peat_verde,HIGH);
+    delay(500);
+    noTone(buzzer);
+    digitalWrite(led_peat_verde,LOW);
+    delay(500);
+  }
+  digitalWrite(led_rojo,LOW);
 }
