@@ -6,18 +6,20 @@
 #define led_peat_verde 12
 #define led_peat_rojo 13
 #define pot A0
+#define buzzer 9
 
-//Declaracion de variables para funcionamiento del programa
+//Declaracion de variables para control del tiempo en base al potenciometro
 int valorPot;
 int segundos;
 
 void setup() {
-  //Declaracion de los leds como pines de salida
+  //Declaracion de los leds y del buzzer como pines de salida
   pinMode(led_verde,OUTPUT);
   pinMode(led_ama,OUTPUT);
   pinMode(led_rojo,OUTPUT);
   pinMode(led_peat_verde,OUTPUT);
   pinMode(led_peat_rojo,OUTPUT);
+  pinMode(buzzer,OUTPUT);
   //Declaracion del boton como pin de salida
   pinMode(boton,INPUT);
   //Iniciacion del puerto serial a 9600 baudios
@@ -79,11 +81,13 @@ void amarillo(){
 }
 
 void rojo(){
-  //Se enciende el rojo del semaforo y el verde del peaton, espera 4 segundos
+  //Se enciende el rojo del semaforo, el verde del peaton y suena el buzzer, espera 4 segundos
+  tone(buzzer,400);
   digitalWrite(led_rojo,HIGH);
   digitalWrite(led_peat_verde,HIGH);
   delay(4000);
-  //Se apaga el rojo del semaforo y el verde del peaton
+  //Se apaga el rojo del semaforo, el verde del peaton y el buzzer deja de sonar
+  noTone(buzzer);
   digitalWrite(led_rojo,LOW);
   digitalWrite(led_peat_verde,LOW);
   delay(1000);
