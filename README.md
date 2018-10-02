@@ -1,4 +1,13 @@
-# SemaforoSistemasProgramables
+SemaforoSistemasProgramables
+============================
+
+Autor
+-----
+Paniagua Soto Rafael
+
+Descripción de la Práctica
+--------------------------
+
 Semaforo que controla el paso de vehiculos y de peatones con Arduino
 
 Realizar un sistema que simule un Semáforo Interactivo usando Arduino. Este debe mostrar un conjunto de semáforos que cambiarán de verde a ámbar a rojo, y viceversa,
@@ -10,3 +19,22 @@ permanecerá abierto para mejorar la movilidad de los vehículos.
 El sistema deberá de contener una perilla para controlar el tiempo mínimo en que el semáforo vehicular va a durar en verde.
 
 Además sonará un Buzzer cuando el semáforo esté en rojo y el peatón en verde, para indicar que el peatón puede cruzar.
+
+Material
+--------
++1 Arduino UNO
++1 Protoboard
++5 LED's
++5 Resistencias de 220 Ohms
++1 Push Button
++1 Resistencia de 1 kOhm
++1 Potenciómetro
++1 Buzzer
++Cables conectores
+
+Resultados de la Práctica
+-------------------------
+![Imagen](https://github.com/rafapaniagua/SemaforoSistemasProgramables/blob/master/Imagen1.jpg)
+![Imagen](https://github.com/rafapaniagua/SemaforoSistemasProgramables/blob/master/Imagen2.jpg)
+![Imagen](https://github.com/rafapaniagua/SemaforoSistemasProgramables/blob/master/Imagen3.jpg)
+![Imagen](https://github.com/rafapaniagua/SemaforoSistemasProgramables/blob/master/Imagen4.jpg)
